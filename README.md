@@ -79,8 +79,8 @@ Purpose:
 Output:
 
 ```bash
-data/processed/crime_2015.parquet\
-data/processed/crime_2016.parquet\
+data/processed/crime_2015.parquet
+data/processed/crime_2016.parquet
 ...\
 data/processed/crime_2024.parquet
 ```
@@ -114,8 +114,8 @@ python prepare_agg.py
 Output:
 
 ```bash
-data/agg/monthly_total.parquet\
-data/agg/monthly_type.parquet\
+data/agg/monthly_total.parquet
+data/agg/monthly_type.parquet
 data/agg/sample_points.parquet
 ```
 
@@ -193,8 +193,8 @@ And of course you can access to the dashboard via link `milestoneone.hoshinostud
 # Author
 
 Team21
-LIN YIHAN
-XU QIAOYANG
+LIN YIHAN\
+XU QIAOYANG\
 QI RUIXUAN
 
 ------------------------------------------------------------------------
