@@ -23,11 +23,11 @@ project-root/
 ├── notebooks/            # Jupyter notebooks
 │   └── Milestone2_Team21.ipynb
 │
-├── src/                  # (Empty for Milestone 2)
+├── src/                  
 │
-├── docs/                 # (Empty for Milestone 2)
+├── docs/                 
 │
-├── deployment/           # (Empty for Milestone 2)
+├── deployment/           
 │
 ├── requirements.txt      # Python dependencies
 │
