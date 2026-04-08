@@ -144,18 +144,8 @@ The dashboard lets you:
 
 Because this project uses **Streamlit**, the easiest way to publish a public link is **Streamlit Community Cloud** rather than GitHub Pages.
 
-To deploy from GitHub:
-
-1. Push the repository to GitHub.
-2. Sign in at `https://share.streamlit.io/`.
-3. Create a new app from this repository.
-4. Set the main file path to `deployment/app.py`.
-5. Deploy the app and wait for the build to finish.
-
-After deployment, Streamlit will provide a public URL in the form:
-
 ```text
-https://<your-app-name>.streamlit.app
+https://team21it5006predictivepolicingay2526sem2-iptbbnvmkkudnc3j7h9wv.streamlit.app/
 ```
 
 ## Notes and Limitations
