@@ -1,120 +1,176 @@
-## Milestone 2 – Model Development and Evaluation
+# IT5006 Predictive Policing: Crime Hotspot Prediction
 
-**Team 21**
+This repository contains the coursework deliverables for **Team 21** in **IT5006 Fundamentals of Data Analytics**. The project focuses on **predicting weekly crime hotspots** from historical crime records and presenting the result in a lightweight **Streamlit dashboard** for demonstration.
 
-This repository contains the implementation for **Milestone 2** of the IT5006 *Fundamentals of Data Analytics* project.
-The goal of this milestone is to build and evaluate machine learning models for **predicting crime hotspots** using historical crime data.
+The repository currently includes:
 
-The main analysis and modeling workflow is implemented in a single Jupyter Notebook.
+- a Jupyter notebook for data preparation, feature engineering, modeling, and evaluation
+- a deployable Streamlit app for interactive hotspot risk prediction
+- the local datasets and model artifact required to reproduce the demo
 
-------
+## Project Overview
 
-# Project Structure
+The core task is to predict whether a **Chicago police district** is likely to become a **hotspot in the following week**.
 
-```
-project-root/
-│
-├── data/                 # Dataset files used in the project
-│	└── agencies.csv
-│	└── chicago_crime_2015_2025.parquet
-│	└── NIBRS_incident.csv
-│	└── NIBRS_OFFENSE.csv
-│	└── NIBRS_OFFENSE_TYPE.csv
-├── notebooks/            # Jupyter notebooks
-│   └── Milestone2_Team21.ipynb
-│
-├── src/                  # (Empty for Milestone 2)
-│
-├── docs/                 # (Empty for Milestone 2)
-│
-├── deployment/           # (Empty for Milestone 2)
-│
-├── requirements.txt      # Python dependencies
-│
+The workflow in this repository covers:
+
+- loading and cleaning historical crime data
+- aggregating crimes into weekly district-level features
+- engineering lag, rolling-window, and category-ratio features
+- training and evaluating machine learning models
+- serving a demo interface that allows users to input weekly features and receive a hotspot risk score
+
+The Streamlit app is implemented in `deployment/app.py`, and the main notebook is `notebooks/Milestone3_Team21.ipynb`.
+
+## Repository Structure
+
+```text
+Team21_IT5006_Predictive_Policing_AY2526Sem2/
+├── data/
+│   ├── agencies.csv
+│   ├── chicago_crime_2015_2025.parquet
+│   ├── NIBRS_incident.csv
+│   ├── NIBRS_OFFENSE.csv
+│   └── NIBRS_OFFENSE_TYPE.csv
+├── deployment/
+│   ├── app.py
+│   └── hotspot_model.joblib
+├── docs/
+│   └── icons8-detain-50.png
+├── notebooks/
+│   └── Milestone3_Team21.ipynb
+├── requirements.txt
 └── README.md
 ```
 
-### Notes
+## Data Files
 
-- All datasets required to run the notebook are located inside the **`data/`** folder.
-- The full analysis workflow is contained in:
+The `data/` directory contains the local files used by the notebook and dashboard:
 
-```
-notebooks/Milestone2_Team21.ipynb
-```
+- `chicago_crime_2015_2025.parquet`: main Chicago crime dataset used for training and dashboard defaults
+- `NIBRS_incident.csv`
+- `NIBRS_OFFENSE.csv`
+- `NIBRS_OFFENSE_TYPE.csv`
+- `agencies.csv`
 
-The folders `src`, `docs`, and `deployment` are reserved for later milestones and are not used in Milestone 2.
+No extra download step is required if these files are already present in the repository.
 
-------
+## Modeling Summary
 
-# Environment Setup
+The deployed dashboard uses a **Gradient Boosting** classifier saved as `deployment/hotspot_model.joblib`.
 
-Before running the notebook, install the required Python libraries.
+The app uses the following input features:
+
+- `total_crimes`
+- `lag_1w`
+- `lag_2w`
+- `rolling_mean_4w`
+- `week_of_year`
+- `ratio_violent`
+- `ratio_property`
+- `ratio_drug`
+- `ratio_public_order`
+
+Reference metrics exposed in the dashboard:
+
+| Metric | Value |
+| --- | ---: |
+| Model | Gradient Boosting |
+| Decision threshold | 0.40 |
+| Test AUC | 0.9143 |
+| Precision | 0.8088 |
+| Recall | 0.3595 |
+| F1 score | 0.4977 |
+| Training period | 2015-2023 |
+| Validation period | 2024 |
+| Test period | 2025 |
+
+If the saved model artifact is unavailable, the Streamlit app will automatically train a fallback model from the local Chicago dataset.
+
+## Environment Setup
+
+Create and activate a Python environment, then install the project dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-------
+The required packages are listed in `requirements.txt`, including `pandas`, `scikit-learn`, `pyarrow`, `jupyter`, `streamlit`, and `joblib`.
 
-# Running the Notebook
+## Running the Notebook
 
-1. Navigate to the project directory.
+To reproduce the analysis workflow:
 
-```
-cd project-root
-```
-
-1. Start Jupyter Notebook (or Jupyter Lab).
-
-```
-jupyter notebook
-```
-
-or
-
-```
+```bash
 jupyter lab
 ```
 
-1. Open the following notebook:
+Then open:
 
+```text
+notebooks/Milestone3_Team21.ipynb
 ```
-notebooks/Milestone2_Team21.ipynb
+
+The notebook contains the end-to-end analysis pipeline, including:
+
+- data loading and preprocessing
+- weekly aggregation and feature construction
+- hotspot label generation
+- model training and comparison
+- validation and test evaluation
+
+## Running the Streamlit App
+
+From the repository root, start the local dashboard with:
+
+```bash
+streamlit run deployment/app.py
 ```
 
-1. Run all cells sequentially.
+After Streamlit starts, open the local URL shown in your terminal, typically:
 
-The notebook performs the following steps:
+```text
+http://localhost:8501
+```
 
-- Data loading from the **data/** directory
-- Data preprocessing and feature engineering
-- Training multiple machine learning models
-- Model evaluation using metrics such as:
-  - Precision
-  - Recall
-  - F1-score
-  - ROC-AUC
-- Robustness testing and cross-validation
+The dashboard lets you:
 
-------
+- enter weekly district-level crime features manually
+- view the predicted hotspot probability for the next week
+- compare the prediction against the model decision threshold
+- inspect the model summary and reference metrics in the sidebar
 
-# Data Requirement
+## External Deployment
 
-All required datasets are already placed in the **`data/`** folder.
+Because this project uses **Streamlit**, the easiest way to publish a public link is **Streamlit Community Cloud** rather than GitHub Pages.
 
-The notebook automatically loads data from this directory, so no additional configuration is required.
+To deploy from GitHub:
 
-------
+1. Push the repository to GitHub.
+2. Sign in at `https://share.streamlit.io/`.
+3. Create a new app from this repository.
+4. Set the main file path to `deployment/app.py`.
+5. Deploy the app and wait for the build to finish.
 
-# Output
+After deployment, Streamlit will provide a public URL in the form:
 
-Running the notebook will generate:
+```text
+https://<your-app-name>.streamlit.app
+```
 
-- Model training results
-- Evaluation metrics
-- Confusion matrices
-- Performance comparisons between models
+## Notes and Limitations
 
-All outputs are displayed directly inside the notebook.
+- This project is a coursework proof-of-concept.
+- Predictions are based on **weekly aggregate features**, not raw incident narratives.
+- The dashboard is intended for **analysis and demonstration**, not real-world policing decisions.
+- Keep the files in `data/` and `deployment/hotspot_model.joblib` in the repository if you want the deployed app to work without modification.
 
+## Team
+
+- LIN YIHAN
+- QI RUIXUAN
+- XU QIAOYANG
+
+# AI Declaration
+
+We used GPT-5.4 to genarated some parts of README files. We are responsible for the content and quality of the submitted work.
